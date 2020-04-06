@@ -1,0 +1,14 @@
+{
+  "name": "extension-gallery",
+  "url": "https://github.com/ngrebenshikov/extension-gallery",
+  "license": "MIT",
+  "tags": ["openfl", "mobile"],
+  "description": "Access to the device's gallery",
+  "version": "1.0.0",
+  "releasenote": "Initial version",
+  "contributors": ["ngrebenshikov"],
+  "dependencies": {
+    "tink_core": "",
+    "jsFileDialog": ""
+  }
+}
