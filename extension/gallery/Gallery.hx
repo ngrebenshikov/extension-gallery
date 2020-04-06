@@ -14,12 +14,14 @@ class Gallery {
 
 	public static function getImage(): Promise<GalleryImage> {
 		return Future.async(function(handler: GalleryImage -> Void) {
+			#if html5
 			var fileDialog = new FileDialog("-gallery");
 			fileDialog.onLoadEnd = function(name, type, bytes) {
 				fileDialog.dispose();
 				handler(new GalleryImage(name, type, bytes));
 			}
 			haxe.Timer.delay(function() { fileDialog.open(); }, 10);
+			#end
 		});
 	}
 	
