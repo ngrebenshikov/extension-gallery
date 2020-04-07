@@ -7,7 +7,7 @@
 		<compilerflag value="-Iinclude"/>
 		
 		<file name="common/ExternalInterface.cpp"/>
-		<file name="common/Gallery.cpp"/>
+		<file name="common/Gallery.mm"/>
 		
 	</files>
 	

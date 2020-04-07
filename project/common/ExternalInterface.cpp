@@ -8,20 +8,17 @@
 
 
 #include <hx/CFFI.h>
-#include "Utils.h"
+#include "Gallery.h"
 
 
 using namespace gallery;
 
 
 
-static value gallery_sample_method (value inputValue) {
-	
-	int returnValue = SampleMethod(val_int(inputValue));
-	return alloc_int(returnValue);
-	
+static void gallery_get_image (value cb) {
+	getImage(cb);
 }
-DEFINE_PRIM (gallery_sample_method, 1);
+DEFINE_PRIM (gallery_get_image, 1);
 
 
 

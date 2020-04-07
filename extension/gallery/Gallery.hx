@@ -21,6 +21,19 @@ class Gallery {
 				handler(new GalleryImage(name, type, bytes));
 			}
 			haxe.Timer.delay(function() { fileDialog.open(); }, 10);
+			#elseif ios
+			gallery_get_image(function(path: String) {
+				var bytes: haxe.io.Bytes = null;
+				try {
+					trace(path);
+					var parts = path.split(";");
+					trace(parts);
+					bytes = sys.io.File.getBytes(parts[0]);
+					handler(new GalleryImage("", "", bytes));
+				} catch(e: Dynamic) {
+					trace(e);
+				}
+			});
 			#end
 		});
 	}
@@ -55,5 +68,6 @@ class Gallery {
 	// private static var gallery_sample_method_jni = JNI.createStaticMethod ("org.haxe.extension.Gallery", "sampleMethod", "(I)I");
 	// #end
 	
+	private static var gallery_get_image = CFFI.load ("gallery", "gallery_get_image", 1);
 	
 }
