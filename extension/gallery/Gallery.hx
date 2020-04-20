@@ -68,6 +68,8 @@ class Gallery {
 	// private static var gallery_sample_method_jni = JNI.createStaticMethod ("org.haxe.extension.Gallery", "sampleMethod", "(I)I");
 	// #end
 	
+	#if ios
 	private static var gallery_get_image = CFFI.load ("gallery", "gallery_get_image", 1);
+	#end
 	
 }

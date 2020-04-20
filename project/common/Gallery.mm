@@ -51,10 +51,10 @@
          path = [path stringByAppendingString:@";"];
          path = [path stringByAppendingString:imgOrientation];
          const char *cfilename=[path UTF8String];
-         gallery::call_callback(cfilename);
          if(SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0")){
              [UIApplication sharedApplication].statusBarHidden = YES;
          }
+         gallery::call_callback(cfilename);
     }
 
     - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
