@@ -9,6 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import org.haxe.lime.HaxeObject;
+import android.content.Intent;
+import android.util.Log;
+
+import org.haxe.extension.gallery.IntentManagerZ;
+
 
 /* 
 	You can use the Android Extension class in order to hook
@@ -38,13 +44,14 @@ import android.view.View;
 */
 public class Gallery extends Extension {
 	
-	
-	public static int sampleMethod (int inputValue) {
-		
-		return inputValue * 100;
-		
+	public static HaxeObject callback;
+	public static int typeActivity = 1;
+
+
+	public static void getImage (HaxeObject cb) {
+		callback = cb;
+		Extension.mainActivity.startActivityForResult(new Intent(Extension.mainContext,IntentManagerZ.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),1);
 	}
-	
 	
 	/**
 	 * Called when an activity you launched exits, giving you the requestCode 
