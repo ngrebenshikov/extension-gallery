@@ -1,6 +1,5 @@
 package extension.gallery;
 
-
 import extension.gallery.GalleryImage;
 import tink.core.Future;
 import tink.core.Promise;
@@ -31,7 +30,7 @@ class Gallery {
 					var parts = path.split(";");
 					trace(parts);
 					bytes = sys.io.File.getBytes(parts[0]);
-					handler(new GalleryImage("", "", bytes));
+					handler(new GalleryImage("", "", bytes, GalleryImage.parseAndInvertRotation(parts[1])));
 				} catch(e: Dynamic) {
 					trace(e);
 				}
@@ -50,7 +49,7 @@ class Gallery {
 							trace(parts);
 							bytes = sys.io.File.getBytes(parts[0]);
 							trace(bytes.length);
-							handler(new GalleryImage("", "", bytes));
+							handler(new GalleryImage("", "", bytes, GalleryImage.parseAndInvertRotation(parts[1])));
 						} catch(e: Dynamic) {
 							trace(e);
 						}
@@ -68,5 +67,5 @@ class Gallery {
 	#if ios
 	private static var gallery_get_image = CFFI.load ("gallery", "gallery_get_image", 1);
 	#end
-	
+
 }

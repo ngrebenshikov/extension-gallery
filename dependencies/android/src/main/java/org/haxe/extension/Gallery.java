@@ -8,12 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-
 import org.haxe.lime.HaxeObject;
 import android.content.Intent;
 import android.util.Log;
+import android.media.ExifInterface;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.File;
+import android.net.Uri;
 
-import org.haxe.extension.gallery.IntentManagerZ;
+import org.haxe.extension.gallery.FileUtils;
 
 
 /* 
@@ -45,12 +49,16 @@ import org.haxe.extension.gallery.IntentManagerZ;
 public class Gallery extends Extension {
 	
 	public static HaxeObject callback;
-	public static int typeActivity = 1;
 
+	private static final int GALLERY_REQUEST = 50001;
 
 	public static void getImage (HaxeObject cb) {
+		Log.d("document-picker", "pick");
 		callback = cb;
-		Extension.mainActivity.startActivityForResult(new Intent(Extension.mainContext,IntentManagerZ.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK),1);
+		Intent picker = new Intent();
+		picker.setType("image/*");
+		picker.setAction(Intent.ACTION_GET_CONTENT);
+		Extension.mainActivity.startActivityForResult(picker, GALLERY_REQUEST);
 	}
 	
 	/**
@@ -59,7 +67,19 @@ public class Gallery extends Extension {
 	 * from it.
 	 */
 	public boolean onActivityResult (int requestCode, int resultCode, Intent data) {
-		
+
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
+			Uri uri = data.getData();
+			Log.d("haxe-gallery", uri.toString());
+			if (uri != null && callback != null) {
+				File f = org.haxe.extension.gallery.FileUtils.saveUriToCacheFile(Extension.mainContext, uri);
+				callback.call1("deviceGalleryFileSelectCallback", f.getPath() + ";" + getFileOrientation(f));
+				callback = null;
+			}
+		}
+
 		return true;
 		
 	}
@@ -148,6 +168,26 @@ public class Gallery extends Extension {
 		
 		
 	}
-	
+
+	public int getFileOrientation(File l){
+		ExifInterface exif;
+		String fileOrient = "";
+		int degreesOrient = 0;
+		try{
+			exif = new ExifInterface(l.getAbsolutePath());
+			fileOrient = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
+		}catch (IOException ex){
+
+		}
+		if(Integer.parseInt(fileOrient)==ExifInterface.ORIENTATION_ROTATE_90){
+			degreesOrient = 90;
+		}
+		else if(Integer.parseInt(fileOrient)==ExifInterface.ORIENTATION_ROTATE_180){
+			degreesOrient = 180;
+		}else if(Integer.parseInt(fileOrient)==ExifInterface.ORIENTATION_ROTATE_270){
+			degreesOrient = 270;
+		}
+		return degreesOrient;
+	}
 	
 }
